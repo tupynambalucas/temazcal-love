@@ -1,0 +1,23 @@
+.navbar{
+    height: 12vh;
+    width: 100vw;
+    position: fixed;
+    z-index: 1000;
+    background: snow;
+}
+.navbar img{
+    height: 8vh;
+    margin: 2vh;
+    margin-left: 4vw;
+}
+.navbar nav{
+    height: 4vh;
+    display: flex;
+    position: absolute;
+    right: 10vw;
+    top: 2vh;
+}
+nav a{
+    color: #354463;
+    margin: 4vh;
+}

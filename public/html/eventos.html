@@ -1,0 +1,190 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+
+    <!-- Css -->
+    <link rel="stylesheet" href="../css/navbar.css">
+    <link rel="stylesheet" href="../css/eventos.css">
+    <link rel="stylesheet" href="../css/fontes.css">
+    <link rel="stylesheet" href="https://unpkg.com/leaflet@1.8.0/dist/leaflet.css" integrity="sha512-hoalWLoI8r4UszCkZ5kL8vayOGVae1oxXe/2A4AO6J9+580uKHDO3JdHb7NzwwzK5xr/Fs0W40kiNHxM9vyTtQ==" crossorigin="" />
+    <link rel="preconnect" href="https://fonts.googleapis.com"> 
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin> 
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@400;700&display=swap" rel="stylesheet">
+</head>
+<body>
+    <header class="navbar">
+        <img src="../img/logo.svg" alt="">
+        <nav>
+            <a href="../index.html">Home</a>
+            <a href="../html/nossa-missao.html">Nossa Missão</a>
+            <a href="../html/eventos.html">Eventos</a>
+            <a href="">Store</a>
+        </nav>
+    </header>
+    <div class="evento">
+        <div class="titulo-data">
+            <img src="../img/svg/alendario.svg">
+            <div class="titulo">
+                <h1 class="opensans-bold">TEMAZCAL LOVE</h1>
+                <p class="opensans-regular">SÁBADO 22 DE MAIO AS 9H</p>
+            </div>
+        </div>
+        <hr>
+        <div class="local">
+            <div class="local-conteudo">
+                <img src="../img/svg/map.svg" alt="">
+                <p class="opensans-regular">COMO CHEGAR | <span>Ecovila PéNoChão, Indaial, SC</span></hp>
+            </div>
+            <div class="map-background"></div>
+            <div id="map" class="map"></div>
+        </div>
+        <hr>
+        <div class="quero-fazer">
+            <img src="../img/svg/love.svg" alt="">
+            <div id="elementos" class="elementos">
+                <div id="terra" class="elemento">
+                    <p class="opensans-regular">R$100</p>
+                    <h2 class="opensans-bold">TERRA</h2>
+                </div>
+                <div id="agua" class="elemento">
+                    <p class="opensans-regular">R$120</p>
+                    <h2 class="opensans-bold">ÁGUA</h2>
+                </div>
+                <div id="ar" class="elemento">
+                    <p class="opensans-regular">R$130</p>
+                    <h2 class="opensans-bold">AR</h2>
+                </div>
+                <div id="fogo" class="elemento">
+                    <p class="opensans-regular">R$140</p>
+                    <h2 class="opensans-bold">FOGO</h2>
+                </div>
+            </div>
+            <button id="botao-checkout" class="opensans-regular">QUERO FAZER</button>
+        </div>
+    </div>
+    <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
+    <script src="https://unpkg.com/leaflet@1.8.0/dist/leaflet.js" integrity="sha512-BB3hKbKWOc9Ez/TAwyWxNXeoV9c1v6FIeYiBieIWkpLjauysF18NzgR1MBNBXf8/KABdlkX68nAhlwcDFLGPCQ==" crossorigin=""></script>
+    <script>
+       // Creating map options
+       var mapOptions = {
+            center: [-26.9667055,-49.1788597,19.14],
+            zoom: 10,
+            attributionControl:false,
+            zoomControl: false
+        }
+         
+
+        var map = new L.map('map', mapOptions);
+        var loveIcon = L.icon({
+        iconUrl: '../img/Arte.png',
+        iconSize: [68, 95],
+        iconAnchor: [22, 94],
+        popupAnchor: [-3, -76],
+        });
+
+        layer = L.tileLayer('http://{s}.google.com/vt/lyrs=m&x={x}&y={y}&z={z}',{
+            maxZoom: 20,
+            subdomains:['mt0','mt1','mt2','mt3']
+        });
+         
+        var marker = L.marker([-26.9667055,-49.1788597,19.14],{icon: loveIcon});
+        
+        marker.addTo(map)
+        map.addLayer(layer);
+    </script>
+    <script>
+        var terra = document.getElementById("terra")
+        var agua = document.getElementById("agua")
+        var ar = document.getElementById("ar")
+        var fogo = document.getElementById("fogo")
+
+        var elementos = document.getElementById("elementos")
+        var elementosChilds = elementos.children
+
+        var ativado = null
+        elementos.addEventListener("mouseover", (e) =>{
+            let elementId = e.target.parentElement.id
+            if (elementId==elementosChilds[0].id) {
+                terra.style.color = "#FF3366"
+
+            }
+            if (elementId==elementosChilds[1].id) {
+                agua.style.color = "#FF3366"
+            }
+            if (elementId==elementosChilds[2].id) {
+                ar.style.color = "#FF3366"
+            }
+            if (elementId==elementosChilds[3].id) {
+                fogo.style.color = "#FF3366"
+            }
+        })
+
+        elementos.addEventListener("mouseout", (e) =>{
+            let elementId = e.target.parentElement.id
+            if (ativado==0) {
+                console.log("Faz nada")
+            } else {
+                terra.style.color = "snow"
+            }
+            if (ativado==1) {
+                console.log("Faz nada")
+            } else {
+                agua.style.color = "snow"
+            }
+            if (ativado==2) {
+                console.log("Faz nada")
+            } else {
+                ar.style.color = "snow"
+            }
+            if (ativado==3) {
+                console.log("Faz nada")
+            } else {
+                fogo.style.color = "snow"
+            }
+        })
+
+        elementos.addEventListener("click",(e) =>{
+            let elementId = e.target.parentElement.id
+            console.log("miau")
+            console.log(elementId)
+            for (let i = 0; i < elementosChilds.length; i++) {
+                elementosChilds[i].style.color = "snow";
+            }
+            if (elementId==elementosChilds[0].id) {
+                terra.style.color = "#FF3366"
+                ativado = 0
+            }
+            if (elementId==elementosChilds[1].id) {
+                agua.style.color = "#FF3366"
+                ativado = 1
+            }
+            if (elementId==elementosChilds[2].id) {
+                ar.style.color = "#FF3366"
+                ativado = 2
+            }
+            if (elementId==elementosChilds[3].id) {
+                fogo.style.color = "#FF3366"
+                ativado = 3
+            }
+        })
+        let botao = document.getElementById("botao-checkout")
+        botao.addEventListener("click",() => {
+            axios.post('/eventos/formpost', {
+                valor: ativado,
+            })
+            .then(function (response) {
+                console.log(response);
+            })
+            .catch(function (error) {
+                console.error(error);
+            });
+            location.href = "/eventos/checkout"
+        })  
+
+    </script>
+</body>
+</html>

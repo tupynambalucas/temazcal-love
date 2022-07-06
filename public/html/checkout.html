@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Document</title>
+    <script src="https://js.stripe.com/v3/"></script>
+    <style>
+        body{
+            background: #FF3366;
+        }
+        #payment-form{
+            width: 30vw;
+            position: absolute;
+            top: 50%;
+            left: 50%;
+            margin-right: -50%;
+            transform: translate(-50%, -50%)
+        }
+    </style>
+</head>
+<body>
+    <form id="payment-form">
+        <div id="payment-element">
+          <!-- Elements will create form elements here -->
+        </div>
+        <button id="submit">Submit</button>
+        <div id="error-message">
+          <!-- Display error message to your customers here -->
+        </div>
+    </form>
+    <script>
+        (async () => {
+        const response = await fetch('/eventos/secret');
+        const {client_secret: clientSecret} = await response.json();
+        // Render the form using the clientSecret
+
+        let segredoCliente = clientSecret
+        const stripe = Stripe('pk_test_51J8G4rBjJ6X5PG6GkDpMa0GKlgoGtmtofDPxZbZcysrM91rSU4jUZOweCJWVWuFmtUPBC2Q3riMcFFAIYhY9hYGm00YFFIEzdI');
+        const appearance = {
+            theme: 'night',
+
+            variables: {
+
+                colorText: 'snow',
+                colorDanger: '#df1b41',
+                fontFamily: 'Ideal Sans, system-ui, sans-serif',
+                spacingUnit: '5vh',
+                borderRadius: '4px',
+                // See all possible variables below
+            } 
+        };
+
+
+
+            // Set up Stripe.js and Elements to use in checkout form, passing the client secret obtained in step 2
+            const elements = stripe.elements({clientSecret, appearance});
+
+            // Create and mount the Payment Element
+            const paymentElement = elements.create('payment');
+            paymentElement.mount('#payment-element');
+
+            const form = document.getElementById('payment-form');
+
+            form.addEventListener('submit', async (event) => {
+            event.preventDefault();
+
+            const {error} = await stripe.confirmPayment({
+                //`Elements` instance that was used to create the Payment Element
+                elements,
+                confirmParams: {
+                    return_url: 'http://localhost:8080/eventos/status',
+                },
+            });
+
+            if (error) {
+                const messageContainer = document.querySelector('#error-message');
+                messageContainer.textContent = error.message;
+            } else {
+                // Your customer will be redirected to your `return_url`. For some payment
+                // methods like iDEAL, your customer will be redirected to an intermediate
+                // site first to authorize the payment, then redirected to the `return_url`.
+            }
+            });
+        })();
+    </script>
+</body>
+</html>
